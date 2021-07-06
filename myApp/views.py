@@ -1,5 +1,5 @@
 from django.core.cache import cache
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from myApp.serializers import VehicleSerializer, ModelsSerializer
@@ -101,3 +101,18 @@ def vehicle_model_operations(request,pk):
     elif request.method == "DELETE":
         vehicle_model.delete()
         return Response({"Message":"Deleted Successfully"},status=status.HTTP_204_NO_CONTENT)
+
+
+class ModelsViewSet(viewsets.ModelViewSet):
+    queryset = VehicleModel.objects.all()
+    serializer_class = ModelsSerializer
+
+
+@api_view(['GET'])
+def vehicles_search(request):
+    search_results = Vehicle.objects.filter(chasis_no=request.query_params['chasis_no'])
+    if len(search_results) != 0:
+        ser = VehicleSerializer(search_results, many=True)
+        return Response(ser.data, status=status.HTTP_200_OK)
+    else:
+        return Response({"Error":"Not Found!"},status=status.HTTP_404_NOT_FOUND )

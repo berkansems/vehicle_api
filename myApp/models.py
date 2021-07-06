@@ -20,6 +20,6 @@ class Vehicle(models.Model):
 
     def delete(self, *args, **kwargs):
         self.is_deleted = True
-        super().save()
+        self.save()
 
 
