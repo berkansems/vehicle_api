@@ -45,7 +45,7 @@ def vehicle_operations(request,pk):
         except:
             return Response({"Error": "Not Found!"}, status=status.HTTP_404_NOT_FOUND)
 
-        ser = VehicleSerializer(vehicle, data=request.data)
+        ser = VehicleSerializer(instance=vehicle, data=request.data)
         if ser.is_valid():
             ser.save()
             cache.set(pk, vehicle, timeout=None)
@@ -92,7 +92,7 @@ def vehicle_model_operations(request,pk):
         ser = ModelsSerializer(vehicle_model)
         return Response(ser.data,status=status.HTTP_200_OK)
     elif request.method == "PUT":
-        ser = ModelsSerializer(vehicle_model, data=request.data)
+        ser = ModelsSerializer(instance=vehicle_model, data=request.data)
         if ser.is_valid():
             ser.save()
             return Response(ser.data, status=status.HTTP_200_OK)
